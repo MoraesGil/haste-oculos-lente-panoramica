@@ -1,0 +1,37 @@
+Haste para óculos de lente panorâmica
+Componentes de terceiros e acesso ao código-fonte
+
+OpenSCAD WebAssembly
+Versão 2025.03.25.wasm24456. Commit ce5039f8a9545ad5a8cf197b3ca11c0939bc67f1.
+A distribuição upstream usa GPL-2.0-or-later com a exceção CGAL em seu COPYING. CADAM fornece o motor no contexto de sua distribuição GPLv3. As licenças, os avisos e a oferta upstream acompanham este arquivo. O ZIP do playground contém os binários. Para obter o código-fonte, use a revisão abaixo com os respectivos submódulos.
+
+Fonte exata, histórico e referências dos submódulos
+https://github.com/openscad/openscad/tree/ce5039f8a9545ad5a8cf197b3ca11c0939bc67f1
+
+Em um terminal com Git:
+  git clone --no-checkout https://github.com/openscad/openscad.git
+  cd openscad
+  git checkout --detach ce5039f8a9545ad5a8cf197b3ca11c0939bc67f1
+  git submodule update --init --recursive
+
+O job openscad-wasm da configuração CircleCI contém o comando de build da versão web.
+https://github.com/openscad/openscad/blob/ce5039f8a9545ad5a8cf197b3ca11c0939bc67f1/.circleci/config.yml
+
+Receitas públicas do ambiente de compilação, contendo o Makefile com as fontes das dependências, o Dockerfile.base e os patches. A revisão listada era a mais recente do projeto na data da distribuição. O job upstream seleciona a imagem openscad/wasm-base:latest. O digest histórico dessa imagem não consta na configuração.
+https://github.com/openscad/openscad-wasm/tree/8e148a0df56f00463a846a14653f9b77e5fa5df3
+
+As cópias gzip de openscad.js e openscad.wasm no HTML descomprimem para os dois arquivos da distribuição oficial. O editor adapta o carregador JavaScript em memória para iniciar o motor em um Web Worker local. Esse adaptador está no script legível no fim de index.html.
+https://files.openscad.org/playground/OpenSCAD-2025.03.25.wasm24456-WebAssembly-web.zip
+SHA-256 0968af31b9c9b3bba68d9031de1695ccae51c32231a1aab4ef27b18c86379f3b (ZIP upstream)
+SHA-256 904a47f29e63afb597bedef747da3b457d8ea17cc793c462c6c8b444e918a62e (openscad.js)
+SHA-256 f72ce246c02c0e501990837102be383326b153fd761774ebfacce5c80c5ecf26 (openscad.wasm)
+https://github.com/Adam-CAD/CADAM/tree/e339e3ad85601bb1e23a5ff9c7f33b51ddf602f5/src/vendor/openscad-wasm
+
+Three.js r169 e OrbitControls, licença MIT
+https://github.com/mrdoob/three.js/tree/r169
+https://github.com/mrdoob/three.js/blob/r169/examples/jsm/controls/OrbitControls.js
+O fonte do visualizador está em fontes/visualizador.mjs. Para gerar o módulo JavaScript do visualizador, use three@0.169.0 e esbuild com os argumentos --bundle --minify --format=iife. O HTML incorpora o resultado em gzip e base64 no recurso viewer.
+
+Fontes do projeto
+https://github.com/MoraesGil/haste-oculos-lente-panoramica
+index.html contém os scripts legíveis da interface, cotas e cortes. fontes/worker.js contém a integração com o motor. modelos/haste-oculos.scad contém a fonte CAD usada pelo editor. Para obter uma variante com os valores atuais, selecione a peça e use Baixar SCAD.
