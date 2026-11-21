@@ -2,7 +2,9 @@
 
 A lente está inteira e a haste quebrou? Este modelo 3MF para impressão 3D permite testar uma haste de reposição com uma lente panorâmica de peça única. A borda superior da lente tem uma aba curva com três ressaltos. Eles entram pela frente da barra e encontram três travas. A armação usa três peças em PETG: uma barra e duas hastes dobráveis, cada uma com o próprio eixo de pontas esféricas.
 
-**[Abrir a demo 3D](https://resume.moraesdev.io/haste-oculos-lente-panoramica/)** · **[Baixar o 3MF para Bambu Lab A1 · Bambu Studio 2.9](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.1.0/haste-oculos-petg.3mf)** · [Baixar o editor HTML para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/raw/refs/heads/main/index.html)
+**[Abrir a demo 3D](https://resume.moraesdev.io/haste-oculos-lente-panoramica/)** · **[Baixar o 3MF para Bambu Lab A1 · Bambu Studio 2.9](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.1.1/haste-oculos-petg.3mf)** · [Baixar o editor HTML para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/raw/refs/heads/main/index.html)
+
+**Para montar uma armação, imprima a barra da mesa 2 e as duas hastes da mesa 3.** A mesa 1 mostra as três peças montadas. A mesa 4 é opcional e serve para experimentar o encaixe com pouco PETG.
 
 [![Prévia do editor 3D com a barra superior, a lente panorâmica transparente e as duas hastes articuladas](imagens/previa-editor.png)](https://resume.moraesdev.io/haste-oculos-lente-panoramica/)
 
@@ -33,20 +35,32 @@ Essas medidas da lente vieram de um exemplar. A demo identifica as medidas estim
 ## Como imprimir na Bambu Lab A1
 
 1. Baixe o 3MF. No Bambu Studio 2.9, use **Arquivo → Abrir projeto**. Se aparecer uma escolha, abra como **projeto**. Importar apenas a geometria descarta a organização das mesas.
-2. Use a lista abaixo para selecionar uma mesa. O projeto usa **Bambu Lab A1**, bico de **0,4 mm** e **PETG**. A configuração usa **Cool Plate SuperTack a 70 °C**. Se a sua A1 usa outra chapa, selecione no fatiador a que está instalada.
-3. Comece pela **mesa 4**. Para testar só a dobradiça, deixe imprimíveis apenas os dois corpos curtos. Encaixe a ponta curta de teste no garfo e mova a articulação à mão. As esferas devem entrar com pressão leve, ficar retidas e permitir o giro, sem marcas brancas nem trincas. Use o gabarito maior dessa mesa para verificar a curva da lente e a posição das três travas.
-4. Quando os testes servirem, fatie a **mesa 2** para imprimir a barra. Fatie a **mesa 3** para imprimir as duas hastes juntas. Com as três peças em mãos, pressione o eixo de cada haste nos alojamentos da barra e confira o giro.
+2. Confira o perfil **Bambu Lab A1**, o bico de **0,4 mm** e o material **PETG**. O projeto usa **Cool Plate SuperTack a 70 °C**. Se você usa outra chapa, selecione no fatiador a que está instalada.
+3. Selecione **Fatiar mesa** para preparar cada mesa que deseja imprimir.
 
-| Mesa | Conteúdo | Uso |
+| Mesa | O que aparece no projeto | Quando usar |
 | --- | --- | --- |
-| 1 | Barra com as duas hastes montadas | Prévia do conjunto |
-| 2 | Barra central sozinha | Imprimir a peça que recebe a lente |
-| 3 | Haste direita e haste esquerda | Imprimir o par na mesma mesa |
-| 4 | Gabarito da lente, garfo curto e ponta de haste com esferas | Testar os encaixes antes das peças inteiras |
+| **1 · Prévia** | Uma montagem com **três peças**, suspensa 3 mm acima da chapa | Gire o modelo para ver como as hastes entram na barra. Pule esta mesa na impressão. |
+| **2 · Barra central** | **Uma peça** com o canal frontal da lente e os dois garfos laterais | Imprima uma vez para montar a armação. |
+| **3 · Duas hastes** | **Duas peças** lado a lado, cada uma com o eixo e as duas pontas esféricas integrados | Imprima a mesa uma vez para obter o par. |
+| **4 · Testes opcionais** | Um garfo curto, uma ponta curta de haste e um gabarito curvo para a lente | Os dois corpos curtos testam a dobradiça. O gabarito testa a lente. Nenhum deles entra na armação final. |
 
-No teste com o Bambu Studio 2.9.1.70, o projeto reabriu com quatro mesas. O fatiador estimou **11,34 g** para a barra, **9,49 g** para as duas hastes e **9,51 g** para a mesa de testes completa.
+O Bambu Studio estima **20,24 g de PETG** para a armação completa (10,75 g na mesa 2 e 9,49 g na mesa 3). Os três testes opcionais da mesa 4 somam 9,22 g.
 
-![As quatro mesas do projeto para a Bambu Lab A1](imagens/quatro-mesas.png)
+![Quatro mesas do Bambu Studio. Imprima a barra da mesa 2 e as duas hastes da mesa 3 para montar a armação.](imagens/quatro-mesas.png)
+
+### Como testar e montar a dobradiça
+
+1. Na **mesa 4**, desative o gabarito curvo para imprimir só o **garfo curto** e a **ponta curta da haste**. Use o mesmo PETG e os mesmos ajustes que pretende usar nas peças inteiras.
+2. Retire os suportes externos. Segure o garfo perto da abertura. Alinhe as duas esferas da haste com as duas entradas do garfo. Aproxime a haste **do lado da orelha em direção à barra**, como mostra o corte.
+3. Pressione as duas esferas juntas. Pare se for preciso forçar ou se o PETG ficar branco ou trincar. Depois de assentar, a haste deve girar à mão e permanecer presa.
+4. Aprovado o teste, repita a montagem com a barra da **mesa 2** e cada haste da **mesa 3**. Dobre uma haste por vez.
+
+![Corte do garfo visto de cima. A esfera superior entra pelo lado da orelha e se aloja atrás da garganta.](imagens/montar-dobradica.png)
+
+No 3MF v0.1.1, a montagem da mesa 1 é um único objeto com três partes. A posição relativa é a mesma das peças impressas depois de encaixadas. O Bambu Studio 2.9.1.70 fatiou as mesas 2, 3 e 4 para A1. Os alojamentos, suas entradas e o canal da lente ficaram livres de trajetos de suporte. O teste digital confirmou o assento das quatro esferas e o giro das hastes em sequência. A prova de bancada mede a firmeza com o PETG da sua impressora.
+
+### Como encaixar a lente
 
 **Aba alinhada à boca → avanço frontal → passagem dos três ressaltos → lente assentada.**
 
@@ -64,7 +78,7 @@ Faça a prova de encaixe na bancada. Pare se precisar torcer a lente, se ela só
 SHA-256 da versão para download
 
 ```text
-88afabc2c85c4e4987f0122574ebde6d8133c722430ff18df7983d5e9d04b6b9
+85b8c13aa3fc8f8bd93f9a4a6ad6f3f074bbd163b430092da1aee3110014ea5f
 ```
 
 </details>
