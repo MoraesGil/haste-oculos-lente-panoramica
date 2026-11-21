@@ -2,9 +2,9 @@
 
 A lente está inteira e a haste quebrou? Este modelo 3MF para impressão 3D permite testar uma haste de reposição com uma lente panorâmica de peça única. A borda superior da lente tem uma aba curva com três ressaltos. Eles entram pela frente da barra e encontram três travas. A armação usa três peças em PETG: uma barra e duas hastes dobráveis, cada uma com o próprio eixo de pontas esféricas.
 
-**[Abrir a demo 3D](https://moraesgil.github.io/haste-oculos-lente-panoramica/)** · **[Baixar o 3MF para Bambu Lab A1 · Bambu Studio 2.9](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.1.0/haste-oculos-petg.3mf)** · [Baixar o editor HTML para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/raw/refs/heads/main/index.html)
+**[Abrir a demo 3D](https://resume.moraesdev.io/haste-oculos-lente-panoramica/)** · **[Baixar o 3MF para Bambu Lab A1 · Bambu Studio 2.9](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.1.0/haste-oculos-petg.3mf)** · [Baixar o editor HTML para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/raw/refs/heads/main/index.html)
 
-[![Prévia do editor 3D com a barra superior, a lente panorâmica transparente e as duas hastes articuladas](imagens/previa-editor.png)](https://moraesgil.github.io/haste-oculos-lente-panoramica/)
+[![Prévia do editor 3D com a barra superior, a lente panorâmica transparente e as duas hastes articuladas](imagens/previa-editor.png)](https://resume.moraesdev.io/haste-oculos-lente-panoramica/)
 
 ## Como reconhecer a lente
 
@@ -56,7 +56,7 @@ Faça a prova de encaixe na bancada. Pare se precisar torcer a lente, se ela só
 
 - [Projeto 3MF](modelos/haste-oculos-petg.3mf) para abrir no fatiador.
 - [Fonte paramétrica em OpenSCAD](modelos/haste-oculos.scad) para editar as peças.
-- [Demo 3D em português](https://moraesgil.github.io/haste-oculos-lente-panoramica/) para conferir medidas e baixar peças individuais.
+- [Demo 3D em português](https://resume.moraesdev.io/haste-oculos-lente-panoramica/) para conferir medidas e baixar peças individuais.
 
 <details>
 <summary>Conferir a integridade do arquivo 3MF</summary>
