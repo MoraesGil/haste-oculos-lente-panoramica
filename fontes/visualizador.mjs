@@ -85,7 +85,7 @@ window.makeViewer = function(canvas, onPick) {
   function rebuild() {
     group.clear();if(!state)return;
     if(name==='conjunto') {
-      const px=73.64*state.chord/150.5, delta=explode?15:0;
+      const px=73.64, delta=explode?15:0;
       add('barra',geos.get('barra'));
       add('lente',geos.get('lente'),[0,lensOffset,0]);
       for(const s of [-1,1]) {

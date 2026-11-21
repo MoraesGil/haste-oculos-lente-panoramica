@@ -4,16 +4,18 @@
 part = "conjunto"; // [conjunto,barra,haste_d,haste_e,pino,gabarito,lente]
 
 /* [Encaixe da lente] */
-// Da ponta da aba à face da trava (A medir).
-shoulder = 2; // [0.35:0.05:4.1]
+// Da ponta livre da aba à face distante do ressalto, em Y (Medida).
+shoulder = 3.9; // [3.4:0.05:4.2]
 // Altura da aba lisa (Medida).
-edge = 2.4; // [2.0:0.05:2.8]
+edge = 2; // [2.0:0.05:2.8]
 // Altura da aba com ressalto (Medida).
-raised = 3.1; // [2.75:0.05:3.8]
-// Distância no arco (Medida).
-spacing = 34; // [29:0.1:39]
-// Largura do ressalto (Estimativa).
-boss_width = 6.5; // [5.5:0.1:7.5]
+raised = 3; // [2.75:0.05:3.8]
+// Distância frontal entre os centros dos ressaltos, em X (Medida).
+spacing = 37; // [32:0.1:42]
+// Largura frontal do ressalto em X (Medida).
+boss_width = 8; // [6:0.1:10]
+// Comprimento do pé do ressalto em Y (Medida).
+boss_depth = 1; // [0.6:0.05:1.4]
 
 /* [Barra superior] */
 // Entrada frontal (Medida).
@@ -25,13 +27,13 @@ snap = 0.2; // [0.05:0.05:0.35]
 
 /* [Lente de referência] */
 // Largura em linha reta (Medida).
-chord = 150.5; // [146:0.1:155]
+chord = 150; // [146:0.1:155]
 // Profundidade do arco (Estimativa).
 sag = 29.65; // [26:0.05:33]
 // Do nariz ao topo (Medida).
 nose = 26; // [23:0.1:29]
-// Espessura do perfil (Sentido a confirmar).
-rim = 2.2; // [1.6:0.05:2.6]
+// Espessura da borda do visor em Y (mesmo nominal da lente).
+rim = 2; // [1.6:0.05:2.6]
 // Comprimento da aba em Y (Pontos a confirmar).
 side_depth = 6; // [4:0.1:8]
 
@@ -54,7 +56,7 @@ throat_retention = 0.16; // [0.08:0.01:0.24]
 /* [Hidden] */
 // Barra superior. X atravessa a lente. +Y aponta para o usuário, Z para cima.
 // A linha central reutiliza os pontos e as tangentes PCHIP do traçado do P1.
-// chord e sag são medidos entre as pontas físicas. s é distância sobre a curva.
+// chord é a largura frontal entre pontas. sag é a profundidade no plano XY.
 _of_x = [0,10,20,30,40,48,55,60,64,68,72,75.55];
 _of_y = [0,1,6,15,27,46,72,101,121,151,175,196];
 _of_m = [0,0.166667,0.642857,1.028571,1.614053,2.911591,4.584361,
@@ -66,23 +68,9 @@ function _of_trace(x) = x >= 75.55 ? 196+(x-75.55)*_of_m[len(_of_m)-1] :
     (2*t*t*t-3*t*t+1)*_of_y[i] + (t*t*t-2*t*t+t)*h*_of_m[i] +
     (-2*t*t*t+3*t*t)*_of_y[i+1] + (t*t*t-t*t)*h*_of_m[i+1];
 function rail_y(x) = 4 + sag*_of_trace(abs(x)*151.10/chord)/196;
-function pivot_x() = 73.64*chord/150.5;
-
-_of_map_steps = 128;
-_of_map_x = [for (i=[0:_of_map_steps]) (chord/2)*i/_of_map_steps];
-function _of_distances(xs, i=1, out=[0]) = i>=len(xs) ? out :
-    let(dx=xs[i]-xs[i-1], dy=rail_y(xs[i])-rail_y(xs[i-1]))
-    _of_distances(xs,i+1,concat(out,[out[i-1]+sqrt(dx*dx+dy*dy)]));
-_of_dist = _of_distances(_of_map_x);
-_of_half_arc = _of_dist[_of_map_steps];
-_of_map = [for (i=[0:_of_map_steps]) [_of_dist[i],_of_map_x[i]]];
-function _of_pitch(x) = (rail_y(x+0.0125)-rail_y(x-0.0125))/0.025;
-function arc_x(s) = sign(s)*(abs(s) <= _of_half_arc ? lookup(abs(s),_of_map) :
-    chord/2 + (abs(s)-_of_half_arc)/sqrt(1+pow(_of_pitch(chord/2),2)));
-// d é a distância mundial em +Y a partir da boca. Todas as seções
-// mantêm X fixo durante a inserção retilínea da lente.
-function _of_ring(s, coords) = let(x=arc_x(s), y=rail_y(x))
-    [for (p=coords) [x,y+p[0],p[1]]];
+// O pivô conserva a posição medida da armação anterior, em todo o ajuste da lente.
+function pivot_x() = 73.64;
+function _of_ring(x, coords) = [for (p=coords) [x,rail_y(x)+p[0],p[1]]];
 
 module _of_sweep(rings) {
     n=len(rings[0]);
@@ -96,9 +84,8 @@ module _of_sweep(rings) {
 }
 function _of_stations(a,b) = let(n=max(1,ceil((b-a)/1.20))) [for(i=[0:n]) a+(b-a)*i/n];
 
-function _of_s_for_x_extension(dx) = _of_half_arc+dx*sqrt(1+pow(_of_pitch(chord/2),2));
-function _of_channel_end() = _of_s_for_x_extension(.35);
-function _of_shell_end() = _of_s_for_x_extension(1.70);
+function _of_channel_end() = chord/2+.35;
+function _of_shell_end() = chord/2+1.70;
 function _of_stop() = insertion+.15;
 function _of_floor() = 13-slack/2;
 function _of_smooth_ceiling() = 13+edge+slack/2;
@@ -119,7 +106,7 @@ module _of_shell() {
 // A bifurcação conserva o pivô nominal em Y=45. A segunda transformação
 // acomoda a diferença de flecha entre a barra e a extremidade da bifurcação.
 module _of_bone_slice(lo,hi,ys,yoff) {
-    translate([0,yoff,0]) scale([1.052*chord/150.5,ys,1]) intersection() {
+    translate([0,yoff,0]) scale([1.052,ys,1]) intersection() {
         p0_front();
         translate([-100,lo,8]) cube([200,hi-lo,18]);
     }
@@ -141,11 +128,14 @@ module _of_bone() {
 // O mesmo recorte abre a boca na frente do P0, o canal horizontal e o espaço
 // do visor sob a aba. A superfície posterior da cavidade é o batente.
 // Na ponta, a folga lateral de 0,35 é medida em X, como a largura da lente.
+// O fundo do alojamento da trava fica logo após o ressalto assentado.
+function _of_pocket_back() = insertion-shoulder+boss_depth+.18;
 function _of_channel_section(s) =
     let(p=_of_fraction(s), z=_of_smooth_ceiling()+(raised-edge)*p,
         f=_of_floor(), m=_of_floor_mouth(), b=_of_stop())
-    [[-82,5],[m,5],[m,f-.35],[m+.22,f],[b,f],[b,z],
-     [.50,z],[0,z+.20],[0,27],[-82,27]];
+    [[-82,5],[m,5],[m,f-.35],[m+.22,f],[b,f],[b,_of_smooth_ceiling()],
+     [_of_pocket_back()+.12,_of_smooth_ceiling()],[_of_pocket_back(),z],
+     [.24,z],[0,z+.20],[0,27],[-82,27]];
 module _of_channel() {
     k=_of_seat_extent();
     lim=_of_channel_end();
@@ -164,9 +154,9 @@ function _of_latch_lead() = max(.035,_of_latch_rear()-min(1.35,.76*_of_latch_rea
 module _of_window(c) {
     w=_of_window_width(c)/2;
     d0=max(.01,min(.18,_of_latch_lead()-.13));
-    d1=_of_stop()-.055;
+    d1=_of_pocket_back()+.04;
     z=_of_smooth_ceiling()-.04;
-    stations=[[-w,.24],[-w+.30,0],[w-.30,0],[w,.24]];
+    stations=concat([[-w,.24]], [for(x=_of_stations(-w+.30,w-.30)) [x,0]], [[w,.24]]);
     _of_sweep([for(p=stations)
         _of_ring(c+p[0],[[d0+p[1],z],[d1-p[1],z],[d1-p[1],27],[d0+p[1],27]])]);
 }
@@ -315,14 +305,12 @@ function lens_lower_depth(x) =
     side_drop + (nose+16-side_drop)*sqrt(max(0,1-pow(u,3)))
         -16*exp(-pow(u/0.15,2));
 
-// As estações de largura seguem o arco da barra. Todos os pontos de uma
+// As estações usam a projeção frontal em X. Todos os pontos de uma
 // seção conservam o mesmo X. d = Y - rail_y(X), positivo para trás.
 function lens_stations() =
-    let(bevel=min(0.35,boss_width/4),
-        breaks=concat([-chord/2],
-              [for(c=[-spacing,0,spacing], offset=[-boss_width/2,-boss_width/2+bevel,
-                                                  0,boss_width/2-bevel,boss_width/2])
-                   arc_x(c+offset)], [chord/2]))
+    let(breaks=concat([-chord/2],
+              [for(c=[-spacing,0,spacing], offset=[-boss_width/2,0,boss_width/2])
+                   c+offset], [chord/2]))
     concat([for(i=[0:len(breaks)-2])
                 let(a=breaks[i],b=breaks[i+1],n=max(1,ceil((b-a)/0.75)))
                 for(k=[0:n-1]) a+(b-a)*k/n], [chord/2]);
@@ -367,26 +355,22 @@ module lens_shield(stations) {
 }
 
 module lens_tooth(c,stations) {
-    bevel=min(0.35,boss_width/4);
-    a=arc_x(c-boss_width/2);
-    b=arc_x(c-boss_width/2+bevel);
-    e=arc_x(c+boss_width/2-bevel);
-    f=arc_x(c+boss_width/2);
-    top=13+edge;
+    a=c-boss_width/2;
+    b=c+boss_width/2;
+    z=13+edge;
     face=insertion-shoulder;
-    ramp=face+0.48*shoulder;
-    // Face de retenção à frente; a rampa fica na ponta que entra primeiro.
-    // 0,10 mm de interseção interna une cada ressalto à sua própria aba.
-    rings=[for(x=stations) if(x>=a-1e-8 && x<=f+1e-8)
-               let(t=max(0,min(1,(x-a)/(b-a),(f-x)/(f-e))),
-                   z=top+(raised-edge)*t)
-               lens_to_world(x,[[face,top-0.10],[insertion,top-0.10],
-                                [insertion,top],[ramp,z],[face,z]])];
-    lens_loft(rings,[[0,1,2],[0,2,3],[0,3,4]]);
+    // O pé mede boss_depth em Y. A ponta livre permanece lisa.
+    // A interseção de 0,10 mm fica dentro da aba para unir o ressalto à lente.
+    section=[[face,z-.10],[face+boss_depth,z-.10],
+             [face+boss_depth,13+raised],[face,13+raised]];
+    _of_sweep([for(x=stations) if(x>=a-1e-8 && x<=b+1e-8)
+        lens_to_world(x,section)]);
 }
 
 module lens() {
-    assert(shoulder>0 && shoulder<side_depth && side_depth>edge && raised>=edge && rim>0);
+    assert(boss_depth>0 && shoulder>boss_depth && shoulder<insertion-.12 &&
+           shoulder<side_depth && side_depth>edge && raised>=edge && rim>0 &&
+           spacing>boss_width && spacing+boss_width/2<chord/2);
     stations=lens_stations();
     union() {
         lens_shield(stations);
