@@ -29,7 +29,7 @@ snap = 0.2; // [0.05:0.05:0.35]
 // Largura em linha reta (Medida).
 chord = 150; // [146:0.1:155]
 // Profundidade do arco (Estimativa).
-sag = 29.65; // [26:0.05:33]
+sag = 42; // [25:0.05:45]
 // Do nariz ao topo (Medida).
 nose = 26; // [23:0.1:29]
 // Espessura da borda do visor em Y (mesmo nominal da lente).
@@ -68,8 +68,9 @@ function _of_trace(x) = x >= 75.55 ? 196+(x-75.55)*_of_m[len(_of_m)-1] :
     (2*t*t*t-3*t*t+1)*_of_y[i] + (t*t*t-2*t*t+t)*h*_of_m[i] +
     (-2*t*t*t+3*t*t)*_of_y[i+1] + (t*t*t-t*t)*h*_of_m[i+1];
 function rail_y(x) = 4 + sag*_of_trace(abs(x)*151.10/chord)/196;
-// O pivô conserva a posição medida da armação anterior, em todo o ajuste da lente.
+// O pivô acompanha em Y a diferença de flecha entre o traçado inicial e a lente.
 function pivot_x() = 73.64;
+function pivot_y() = 45+(sag-29.65);
 function _of_ring(x, coords) = [for (p=coords) [x,rail_y(x)+p[0],p[1]]];
 
 module _of_sweep(rings) {
@@ -103,8 +104,8 @@ module _of_shell() {
     sec=[[0,11.15],[b-.25,11.15],[b,11.40],[b,z-.35],[b-.35,z],[.3,z],[0,z-.30]];
     _of_sweep([for(s=_of_stations(-_of_shell_end(),_of_shell_end())) _of_ring(s,sec)]);
 }
-// A bifurcação conserva o pivô nominal em Y=45. A segunda transformação
-// acomoda a diferença de flecha entre a barra e a extremidade da bifurcação.
+// O trecho dianteiro acompanha a nova flecha. A extremidade traseira translada
+// como corpo rígido para conservar a união da longarina com a dobradiça.
 module _of_bone_slice(lo,hi,ys,yoff) {
     translate([0,yoff,0]) scale([1.052,ys,1]) intersection() {
         p0_front();
@@ -113,14 +114,13 @@ module _of_bone_slice(lo,hi,ys,yoff) {
 }
 module _of_bone() {
     ratio=sag/29.65;
-    split=24;
-    mapped=4+(split-4)*ratio;
-    rear=(41.45-mapped)/(41.45-split);
+    split=4+29.65;
+    delta=sag-29.65;
     if(abs(ratio-1)<0.00001)
         _of_bone_slice(-5,41.45,1,0);
     else {
         _of_bone_slice(-5,split+.015,ratio,4*(1-ratio));
-        _of_bone_slice(split-.015,41.45,rear,mapped-split*rear);
+        _of_bone_slice(split-.015,41.45,1,delta);
     }
 }
 
@@ -184,11 +184,20 @@ module _of_rail(with_hinges=false) {
     union() {
         difference() {
             union() {
-                _of_bone();
-                _of_shell();
+                difference() {
+                    union() {
+                        _of_bone();
+                        _of_shell();
+                    }
+                    // Em flechas maiores, o fim da barra alcança o raio varrido
+                    // pelo mancal. Reserve 0,25 mm radiais e 0,20 mm por face.
+                    for(side=[-1,1])
+                        translate([side*pivot_x(),pivot_y(),15])
+                            cylinder(r=3.85+.25,h=pin_span-3.14+.40,center=true,$fn=96);
+                }
                 if(with_hinges) {
-                    translate([pivot_x(),45,15]) hinge();
-                    mirror([1,0,0]) translate([pivot_x(),45,15]) hinge();
+                    translate([pivot_x(),pivot_y(),15]) hinge();
+                    mirror([1,0,0]) translate([pivot_x(),pivot_y(),15]) hinge();
                 }
             }
             _of_channel();
@@ -410,7 +419,7 @@ module conjunto() {
   color([.16,.25,.24]) front();
   color([.49,.77,.78,.42]) lens();
   for (s=[-1,1])
-    scale([s,1,1]) translate([pivot_x(),45,15])
+    scale([s,1,1]) translate([pivot_x(),pivot_y(),15])
       color([.27,.40,.39]) arm_with_pin();
 }
 if (part=="barra") front();

@@ -41,7 +41,7 @@ Vista de cima, apoie a mesma borda de uma régua nas duas pontas da aba. Meça a
 
 Cada ponta do eixo da haste tem uma esfera de **3,70 mm** em um alojamento nominal de **4,00 mm**. A garganta de **3,54 mm** cria retenção nominal de **0,16 mm no diâmetro**. O editor permite ajustar as duas medidas separadamente. Use os corpos de prova da mesa 4 para decidir com o seu PETG.
 
-A curvatura desta revisão usa uma profundidade de **29,65 mm**, estimada a partir do contorno. O gabarito da mesa 4 permite comparar a curva e os três rebaixos com a lente real antes de imprimir a armação completa.
+A curvatura desta revisão usa uma profundidade de **42 mm**. A leitura da régua em duas fotos ficou em aproximadamente 42,6 e 41,6 mm. Essa diferença reflete a perspectiva e a escolha da borda transparente. A forma entre o centro e as pontas usa o perfil traçado do exemplar. O gabarito da mesa 4 permite comparar a curva e os três rebaixos com a lente real antes de imprimir a armação completa.
 
 ## Como usar o editor
 
@@ -67,6 +67,8 @@ A curvatura desta revisão usa uma profundidade de **29,65 mm**, estimada a part
 | **3 · Duas hastes** | **Duas peças** lado a lado, cada uma com o eixo e as duas pontas esféricas integrados | Imprima a mesa uma vez para obter o par. |
 | **4 · Testes opcionais** | Um garfo curto, uma ponta curta de haste e um gabarito curvo para a lente | Os dois corpos curtos testam a dobradiça. O gabarito testa a lente. Nenhum deles entra na armação final. |
 
+Para a barra e as duas hastes (mesas 2 e 3), o Bambu Studio estima **21,95 g** de PETG na A1. O Snapmaker Orca estima **25,36 g** na U1. A mesa de testes usa mais 10,17 g na A1 ou 11,35 g na U1.
+
 ![Quatro mesas do Bambu Studio. Imprima a barra da mesa 2 e as duas hastes da mesa 3 para montar a armação.](imagens/quatro-mesas.png)
 
 ### Como testar e montar a dobradiça
@@ -78,7 +80,7 @@ A curvatura desta revisão usa uma profundidade de **29,65 mm**, estimada a part
 
 ![Corte do garfo visto de cima. A esfera superior entra pelo lado da orelha e se aloja atrás da garganta.](imagens/montar-dobradica.png)
 
-Nos dois arquivos, a montagem da mesa 1 é um único objeto com três partes. A posição relativa é a mesma das peças impressas depois de encaixadas. As mesas 2, 3 e 4 foram fatiadas no Bambu Studio 2.9.1.70 para a A1 e no Snapmaker Orca para a U1. Os alojamentos, suas entradas e o canal da lente ficaram livres de trajetos de suporte. No modelo, a lente assenta com as três saliências nos rebaixos. A verificação digital também conferiu o assento das quatro esferas e o giro das hastes em sequência. A prova de bancada mede a firmeza com o PETG da sua impressora.
+Nos dois arquivos, a montagem da mesa 1 é um único objeto com três partes. A posição relativa é a mesma das peças impressas depois de encaixadas. Os pivôs acompanham as duas extremidades da barra quando você ajusta a curva no editor. As mesas 2, 3 e 4 foram fatiadas no Bambu Studio 2.9.1.70 para a A1 e no Snapmaker Orca para a U1. Os alojamentos, suas entradas e o canal da lente ficaram livres de trajetos de suporte. No modelo, a lente assenta com as três saliências nos rebaixos. A verificação digital também conferiu o assento das quatro esferas e o giro das hastes em sequência. A prova de bancada mede a firmeza com o PETG da sua impressora.
 
 ### Como encaixar a lente
 
@@ -96,8 +98,8 @@ Faça a prova de encaixe na bancada. Pare se precisar torcer a lente, se ela só
 <summary>Conferir os arquivos por SHA-256</summary>
 
 ```text
-629711e2a3098f02c01517708a2c9e766a55656a32bf393575af99021389003a  haste-oculos-petg_A1.3mf
-67f7a178d35246990bfcc07c4581c640f1cb9210a6e188ecc4a6f90bcdd15800  haste-oculos-petg_U1.3mf
+4e41e3b12a8c54efe5b257b527cffd42a5151ca6dc49d153c51ee06984f6effe  haste-oculos-petg_A1.3mf
+e89ef19ce5151356617c70ac573b98c4e44bd70cc05135ad6b50ea2a586e39eb  haste-oculos-petg_U1.3mf
 ```
 
 </details>

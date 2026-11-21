@@ -85,11 +85,11 @@ window.makeViewer = function(canvas, onPick) {
   function rebuild() {
     group.clear();if(!state)return;
     if(name==='conjunto') {
-      const px=73.64, delta=explode?15:0;
+      const px=73.64, py=state.sag+15.35, delta=explode?15:0;
       add('barra',geos.get('barra'));
       add('lente',geos.get('lente'),[0,lensOffset,0]);
       for(const s of [-1,1]) {
-        add(s===1?'haste_d':'haste_e',geos.get('haste_d'),[s*(px+delta),45+(explode?14:0),15],s<0);
+        add(s===1?'haste_d':'haste_e',geos.get('haste_d'),[s*(px+delta),py+(explode?14:0),15],s<0);
 
       }
     } else add(name,geos.get(name==='haste_e'?'haste_d':name),[0,0,0],name==='haste_e');

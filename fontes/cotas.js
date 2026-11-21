@@ -66,8 +66,9 @@
     g.line(cx,ny,x(20),ny);g.arrow(x(17),top,x(17),ny);g.tag('nose',x(17),(top+ny)/2,'Altura do topo da aba ao recorte do nariz');
     g.caption(cx,201,'Eixo X · entre os centros das três travas');
   }
-  function plan(p,edit) {
-    const g=painter('draw-plan',p,edit),half=p.chord/2,s=292/150,cx=182;
+  function plan(p,edit,sagEdited) {
+    const g=painter('draw-plan',p,edit),half=p.chord/2,cx=182;
+    const s=Math.min(292/p.chord,111/(p.sag+p.insertion));
     const rail=window.lensPlanTrace(p.chord,p.sag);
     // +Y para cima nesta vista: o centro da lente fica à frente das pontas.
     const pt=(x,d)=>[cx+s*x,140-s*(rail.y(x)-rail.y(0)+d)];
@@ -79,10 +80,11 @@
     g.line(l[0],l[1],r[0]+4,r[1],'construction');
     g.caption(cx,r[1]-12,'Régua entre as pontas');
     g.line(cx+7,r[1],cx+7,r[1]+7,'leader');g.line(cx+7,r[1]+7,cx,r[1]+7,'leader');
-    g.arrow(cx,r[1],cx,center[1]);g.tag('sag',cx,(center[1]+r[1])/2,'Flecha estimada, vão a 90 graus da régua até o meio da borda livre da lente');
+    g.arrow(cx,r[1],cx,center[1]);g.tag('sag',cx,(center[1]+r[1])/2,'Vão a 90 graus da régua até o meio da borda livre da lente');
     g.line(l[0],l[1]+3,l[0],168);g.line(r[0],r[1]+3,r[0],168);g.arrow(l[0],166,r[0],166);
     g.tag('chord',cx,166,'Largura da lente em X');
-    g.caption(cx,201,'Vão da régua até o meio da lente · estimado');
+    g.caption(cx,201,'Vão da régua até o meio da lente');
+    document.getElementById('plan-note').textContent=sagEdited?'Valor editado. A leitura nas fotos foi de cerca de 42 mm.':'Cerca de 42 mm, pela régua nas fotos.';
   }
   function section(p,edit) {
     const g=painter('draw-section',p,edit),s=29,tip=259, x=d=>tip-(p.insertion-d)*s, z=h=>146-h*16;
@@ -100,5 +102,5 @@
     g.caption(x(0),201,'Boca do canal');g.caption(tip,201,'Ponta livre');
     document.getElementById('near-note').textContent='Ponta livre até a face próxima = '+g.fmt(p.shoulder)+' − '+g.fmt(p.boss_depth)+' = '+g.fmt(p.shoulder-p.boss_depth)+' mm.';
   }
-  window.drawSheets=(p,edit)=>{front(p,edit);plan(p,edit);section(p,edit);};
+  window.drawSheets=(p,edit,sagEdited)=>{front(p,edit);plan(p,edit,sagEdited);section(p,edit);};
 })();
