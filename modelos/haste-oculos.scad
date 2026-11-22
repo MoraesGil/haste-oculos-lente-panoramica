@@ -24,6 +24,10 @@ insertion = 5.2; // [4.7:0.05:5.8]
 slack = 0.3; // [0.15:0.05:0.55]
 // Interferência da trava (Projeto).
 snap = 0.2; // [0.05:0.05:0.35]
+// Comprimento nominal da rampa em Y. O espaço à frente da trava limita o comprimento efetivo.
+ramp_run = 1.25; // [0.55:0.05:1.75]
+// Espessura nominal do guia sobre o espaço de flexão (Projeto).
+guide_cover = 1.20; // [1.00:0.05:1.80]
 
 /* [Lente de referência] */
 // Largura em linha reta (Medida).
@@ -146,33 +150,54 @@ module _of_channel() {
     _of_sweep([for(s=stations) _of_ring(s,_of_channel_section(s))]);
 }
 
-// As três janelas abrem-se na superfície superior da barra, sobre os
-// ressaltos. A parede traseira permanece contínua atrás das três aberturas.
+// O ressalto percorre a rampa em +Y. A face de retorno é vertical.
 function _of_window_width(c) = boss_width+(abs(c)<.01 ? 5.1 : 3.9);
 function _of_latch_rear() = insertion-shoulder-.12;
-function _of_latch_lead() = max(.035,_of_latch_rear()-min(1.35,.76*_of_latch_rear()));
+function _of_latch_lead() = max(.035,_of_latch_rear()-ramp_run);
+function _of_latch_toe() = _of_latch_rear()-min(.05,.20*(_of_latch_rear()-_of_latch_lead()));
+function _of_latch_body_back() = min(_of_stop()-.10,_of_latch_rear()+.28);
+function _of_latch_base() = _of_boss_ceiling()+.05;
+function _of_latch_tip() = 13+raised-min(snap,max(0,raised-edge-.08));
+function _of_guide_underside() = _of_boss_ceiling()+1.75;
+function _of_guide_top() = _of_guide_underside()+guide_cover;
+
+// Espaço de flexão atrás da boca, limitado ao tramo da lingueta.
+// O restante do rebaixo usa o teto da canaleta. O guia cobre o vão.
 module _of_window(c) {
     w=_of_window_width(c)/2;
-    d0=max(.01,min(.18,_of_latch_lead()-.13));
-    d1=_of_pocket_back()+.04;
-    z=_of_smooth_ceiling()-.04;
-    stations=concat([[-w,.24]], [for(x=_of_stations(-w+.30,w-.30)) [x,0]], [[w,.24]]);
+    d0=-.065;
+    d1=_of_latch_body_back()+.14;
+    z0=_of_smooth_ceiling()-.04;
+    z1=_of_guide_underside();
+    bevel=min(.24,.24*(d1-d0));
+    stations=concat([[-w,bevel]], [for(x=_of_stations(-w+.30,w-.30)) [x,0]], [[w,bevel]]);
     _of_sweep([for(p=stations)
-        _of_ring(c+p[0],[[d0+p[1],z],[d1-p[1],z],[d1-p[1],27],[d0+p[1],27]])]);
+        _of_ring(c+p[0],[[d0+p[1],z0],[d1-p[1],z0],[d1-p[1],z1],[d0+p[1],z1]])]);
 }
 
-// Mola de duas raízes, longitudinalmente curta e flexível em Z. Na
-// aproximação o ressalto sobe sob a rampa. Quando assenta, a face dianteira
-// do ressalto fica 0,12 mm atrás da face de retenção da mola.
+module _of_upper_guide(c, trim=0) {
+    w=_of_window_width(c)/2;
+    back=_of_pocket_back()+.60+trim;
+    z0=_of_shell_top()-.72;
+    stations=concat([[-w-1.18,.55]],
+        [for(u=_of_stations(-w-.35,w+.35)) [u,0]],[[w+1.18,.55]]);
+    _of_sweep([for(p=stations)
+        let(top=_of_guide_top()-p[1]+trim)
+        _of_ring(c+p[0],[[-trim,z0],[back-.18,z0],[back,top-.37],
+                        [back-.30,top],[.23-trim,top],[-trim,top-.18]])]);
+}
+
+// A lingueta fica presa nas duas raízes em X e flete em Z durante a entrada.
 module _of_leaf(c) {
     w=_of_window_width(c)/2;
     wide=min(boss_width*.40,w-.95);
     d0=_of_latch_lead();
     d1=_of_latch_rear();
-    toe=d1-min(.24,.20*(d1-d0));
-    ds=min(_of_stop()-.10,d1+.28);
-    base=_of_boss_ceiling()+.05;
-    tip=_of_floor()+raised-snap;
+    toe=_of_latch_toe();
+    ds=_of_latch_body_back();
+    base=_of_latch_base();
+    tip=_of_latch_tip();
+    assert(d1-d0>.10 && ds>d1 && raised>=edge);
     stations=[[-w-1.35,0],[-w+.65,0],[-wide,0],[-wide*.48,.72],
               [-wide*.34,1],[0,1],[wide*.34,1],[wide*.48,.72],
               [wide,0],[w-.65,0],[w+1.35,0]];
@@ -188,6 +213,7 @@ module _of_rail(with_hinges=false) {
                     union() {
                         _of_bone();
                         _of_shell();
+                        for(c=[-spacing,0,spacing]) _of_upper_guide(c);
                     }
                     // Em flechas maiores, o fim da barra alcança o raio varrido
                     // pelo mancal. Reserve 0,25 mm radiais e 0,20 mm por face.
@@ -214,7 +240,10 @@ module gauge() {
     sec=[[-.12,11.15],[b,11.15],[b,z],[-.12,z]];
     intersection() {
         _of_rail(false);
-        _of_sweep([for(s=_of_stations(-_of_shell_end(),_of_shell_end())) _of_ring(s,sec)]);
+        union() {
+            _of_sweep([for(s=_of_stations(-_of_shell_end(),_of_shell_end())) _of_ring(s,sec)]);
+            for(c=[-spacing,0,spacing]) _of_upper_guide(c,.14);
+        }
     }
 }
 
