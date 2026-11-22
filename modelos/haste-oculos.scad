@@ -1,7 +1,7 @@
 // Haste para óculos de lente panorâmica • editor paramétrico do conjunto em milímetros para a Bambu Lab A1.
 // A lente é uma referência de ajuste. A resistência a impacto exige ensaio.
 /* [Peça] */
-part = "conjunto"; // [conjunto,barra,haste_d,haste_e,pino,gabarito,lente]
+part = "conjunto"; // [conjunto,barra,haste_d,haste_e,pino,gabarito,lente,faixa_verde,aros]
 
 /* [Encaixe da lente] */
 // Da ponta livre da aba à face distante do ressalto, em Y (Medida).
@@ -20,8 +20,12 @@ boss_depth = 1; // [0.6:0.05:1.4]
 /* [Barra superior] */
 // Entrada frontal (Medida).
 insertion = 5.2; // [4.7:0.05:5.8]
-// Folga vertical total (Projeto).
+// Vão vertical entre apoio interno e guia, na região de faces opostas.
+fit_gap = 2.00; // [2.00:0.05:2.80]
+// Folga adicional no alojamento dos ressaltos e na boca do visor (Projeto).
 slack = 0.3; // [0.15:0.05:0.55]
+// Recuo do apoio inferior além do fundo do rebaixo (Projeto).
+underside_reveal = 0.25; // [0.15:0.05:0.60]
 // Interferência da trava (Projeto).
 snap = 0.2; // [0.05:0.05:0.35]
 // Comprimento nominal da rampa em Y. O espaço à frente da trava limita o comprimento efetivo.
@@ -92,9 +96,9 @@ function _of_stations(a,b) = let(n=max(1,ceil((b-a)/1.20))) [for(i=[0:n]) a+(b-a
 function _of_channel_end() = chord/2+.35;
 function _of_shell_end() = chord/2+1.70;
 function _of_stop() = insertion+.15;
-function _of_floor() = 13-slack/2;
-function _of_smooth_ceiling() = 13+edge+slack/2;
-function _of_boss_ceiling() = 13+raised+slack/2;
+function _of_floor() = 13;
+function _of_smooth_ceiling() = _of_floor()+fit_gap;
+function _of_boss_ceiling() = max(13+raised+slack/2,_of_smooth_ceiling()+.10);
 function _of_floor_mouth() = max(0,insertion-side_depth+edge+slack/2);
 function _of_shell_back() = _of_stop()+1.65;
 function _of_shell_top() = _of_boss_ceiling()+1.70;
@@ -135,7 +139,7 @@ module _of_bone() {
 // O fundo do alojamento da trava fica logo após o ressalto assentado.
 function _of_pocket_back() = insertion-shoulder+boss_depth+.18;
 function _of_channel_section(s) =
-    let(p=_of_fraction(s), z=_of_smooth_ceiling()+(raised-edge)*p,
+    let(p=_of_fraction(s), z=_of_smooth_ceiling()+(_of_boss_ceiling()-_of_smooth_ceiling())*p,
         f=_of_floor(), m=_of_floor_mouth(), b=_of_stop())
     [[-82,5],[m,5],[m,f-.35],[m+.22,f],[b,f],[b,_of_smooth_ceiling()],
      [_of_pocket_back()+.12,_of_smooth_ceiling()],[_of_pocket_back(),z],
@@ -205,6 +209,58 @@ module _of_leaf(c) {
         _of_ring(c+p[0],[[d0,base],[toe,z],[d1,z],[d1,base],
                           [ds,base],[ds,base+.91],[d0,base+.91]])]);
 }
+
+// O rebaixo abre para baixo, dentro da faixa dianteira. Retire o apoio
+// interno somente sob a largura dos ressaltos. O batente e as ligações
+// entre as três aberturas continuam unidos ao guia.
+function _of_underside_back() = _of_pocket_back()+underside_reveal;
+function _of_underside_half() = boss_width/2+.65;
+function _of_forward_projection() = 1.05;
+function _of_rim_front() = _of_latch_rear()+.06;
+function _of_rim_rear() = _of_pocket_back()+.04;
+function _of_rim_back() = _of_rim_rear()+.32;
+function _of_rim_inner() = boss_width/2+.16;
+function _of_rim_outer() = _of_rim_inner()+.46;
+
+module _of_underside_access(c) {
+    w=_of_underside_half();
+    b=_of_underside_back();
+    stations=concat([[-w,.24]], [for(u=_of_stations(-w+.30,w-.30)) [u,0]], [[w,.24]]);
+    _of_sweep([for(p=stations) _of_ring(c+p[0],
+        [[-2,3],[b-p[1],3],[b-p[1],_of_floor()+.055],[-2,_of_floor()+.055]])]);
+}
+
+module _of_forward_guide_strip() {
+    front=-_of_forward_projection();
+    base=max(13+raised+.38,_of_smooth_ceiling()+.38);
+    bridge=_of_guide_underside()-.34;
+    top=bridge+.58;
+    assert(bridge-base>.25);
+    sec=[[front,base+.20],[front+.22,base],[-.035,base],[-.035,bridge],
+         [.53,bridge],[.53,top],[.30,top+.18],[front+.25,top+.18],[front,top-.05]];
+    _of_sweep([for(x=_of_stations(-_of_shell_end(),_of_shell_end())) _of_ring(x,sec)]);
+}
+
+// O aro está na face inferior. As laterais ficam fora da largura da
+// trava, a barra traseira fica após o ressalto e a lingueta fecha a frente.
+module _of_underside_rim(c) {
+    inner=_of_rim_inner();
+    outer=_of_rim_outer();
+    a=_of_rim_front();
+    b=_of_rim_rear();
+    back=_of_rim_back();
+    z0=_of_smooth_ceiling();
+    z1=_of_boss_ceiling()+.14;
+    for(side=[-1,1]) {
+        first=c+(side<0 ? -outer : inner);
+        last=c+(side<0 ? -inner : outer);
+        _of_sweep([for(x=[first,last]) _of_ring(x,
+            [[a,z0+.14],[a+.12,z0],[back-.11,z0],[back,z0+.11],[back,z1],[a,z1]])]);
+    }
+    _of_sweep([for(x=_of_stations(c-inner-.06,c+inner+.06)) _of_ring(x,
+        [[b,z0+.08],[b+.08,z0],[back-.10,z0],[back,z0+.10],[back,z1],[b,z1]])]);
+}
+
 module _of_rail(with_hinges=false) {
     union() {
         difference() {
@@ -227,9 +283,16 @@ module _of_rail(with_hinges=false) {
                 }
             }
             _of_channel();
-            for(c=[-spacing,0,spacing]) _of_window(c);
+            for(c=[-spacing,0,spacing]) {
+                _of_window(c);
+                _of_underside_access(c);
+            }
         }
-        for(c=[-spacing,0,spacing]) _of_leaf(c);
+        for(c=[-spacing,0,spacing]) {
+            _of_leaf(c);
+            _of_underside_rim(c);
+        }
+        _of_forward_guide_strip();
     }
 }
 module front() { _of_rail(true); }
@@ -243,6 +306,7 @@ module gauge() {
         union() {
             _of_sweep([for(s=_of_stations(-_of_shell_end(),_of_shell_end())) _of_ring(s,sec)]);
             for(c=[-spacing,0,spacing]) _of_upper_guide(c,.14);
+            _of_forward_guide_strip();
         }
     }
 }
@@ -457,5 +521,7 @@ else if (part=="haste_e") mirror([1,0,0]) arm_with_pin();
 else if (part=="pino") arm_axis();
 else if (part=="gabarito") gauge();
 else if (part=="lente") lens();
+else if (part=="faixa_verde") _of_forward_guide_strip();
+else if (part=="aros") for(c=[-spacing,0,spacing]) _of_underside_rim(c);
 else if (part=="conjunto") conjunto();
 else assert(false, "Selecione uma peça válida em part.");

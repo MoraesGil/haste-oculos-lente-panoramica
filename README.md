@@ -6,18 +6,18 @@ A lente está inteira e a haste quebrou? Este modelo 3MF para impressão 3D perm
 
 | Impressora | Projeto em PETG | Abra com |
 | --- | --- | --- |
-| Bambu Lab A1 | [Baixar haste-oculos-petg_A1.3mf](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.4.0/haste-oculos-petg_A1.3mf) | Bambu Studio 2.9 |
-| Snapmaker U1 | [Baixar haste-oculos-petg_U1.3mf](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.4.0/haste-oculos-petg_U1.3mf) | Snapmaker Orca |
+| Bambu Lab A1 | [Baixar haste-oculos-petg_A1.3mf](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.5.0/haste-oculos-petg_A1.3mf) | Bambu Studio 2.9 |
+| Snapmaker U1 | [Baixar haste-oculos-petg_U1.3mf](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.5.0/haste-oculos-petg_U1.3mf) | Snapmaker Orca |
 
-[Baixar o editor HTML para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.4.0/haste-oculos-editor.html)
+[Baixar o editor HTML para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.5.0/haste-oculos-editor.html)
 
 **Para montar uma armação, imprima a barra da mesa 2 e as duas hastes da mesa 3.** A mesa 1 mostra as três peças montadas. A mesa 4 é opcional e serve para experimentar o encaixe com pouco PETG.
 
-[![Prévia do editor 3D com a barra superior, a lente panorâmica transparente e as duas hastes articuladas](imagens/previa-editor.png)](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.4.0/haste-oculos-editor.html)
+[![Prévia do editor 3D com a barra superior, a lente panorâmica transparente e as duas hastes articuladas](imagens/previa-editor.png)](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.5.0/haste-oculos-editor.html)
 
 ## Como reconhecer a lente
 
-A lente é uma peça única que envolve as laterais do rosto. Para reconhecer o encaixe, olhe a aba da borda superior. Há um ressalto acima do nariz e um de cada lado. Os três entram pela frente da barra. Cada ressalto passa pela mini-rampa da lingueta e assenta em um rebaixo sob o guia superior. A face de retenção intercepta a travinha quando se tenta puxar a lente para fora.
+A lente é uma peça única que envolve as laterais do rosto. Para reconhecer o encaixe, olhe a aba da borda superior. Há um ressalto acima do nariz e um de cada lado. Os três entram pela frente da barra. Cada ressalto passa pela mini-rampa da lingueta e assenta em um rebaixo aberto pela face inferior do arco. A face de retenção intercepta a travinha quando se tenta puxar a lente para fora.
 
 | Onde encostar o paquímetro | Medida do exemplar |
 | --- | ---: |
@@ -47,10 +47,10 @@ A curvatura desta revisão usa uma profundidade de **42 mm**. A leitura da régu
 
 1. Baixe o HTML e abra o arquivo no navegador. Veja as cotas nas vistas frontal, superior e em corte. A cota indica qual distância medir e mostra o valor em milímetros.
 2. Selecione a medida no desenho e digite o valor da sua lente. O corte mostra a espessura lisa e a região com o ressalto. A vista superior mostra onde apoiar a régua para medir a curva.
-3. Mova **Entrada frontal da lente** para ver a travinha passar pela mini-rampa e assentar no baixo-relevo. O corte mostra o movimento da lingueta. As cotas da rampa e do guia superior ficam junto ao corte. Use **Dobrar as hastes** para ver a montagem em movimento.
+3. Mova **Entrada frontal da lente** para ver a travinha passar pela mini-rampa e assentar no baixo-relevo. O corte mostra o movimento da lingueta. Escolha **Barra superior** e **Por baixo** para ver os três rebaixos sem a lente. As cotas do vão, da rampa e do guia superior ficam junto ao corte. Use **Dobrar as hastes** para ver a montagem em movimento.
 4. Use **Salvar HTML** para guardar suas medidas. Para imprimir uma peça personalizada, selecione a peça e use **Baixar STL**. Os dois projetos 3MF contêm as medidas de referência desta release.
 
-![Corte do encaixe frontal entre a aba da lente e a barra superior, com o percurso e as superfícies de retenção](imagens/detalhe-encaixe.png)
+![Corte do arco no pino central, com o vão entre o corpo e a faixa cotado em 2 mm](imagens/detalhe-encaixe.png)
 
 <a id="como-imprimir-na-bambu-lab-a1"></a>
 
@@ -84,22 +84,22 @@ Nos dois arquivos, a montagem da mesa 1 é um único objeto com três partes. A 
 
 **Aba alinhada à boca → cada travinha sobe pela mini-rampa → a lingueta retorna → travinha presa no baixo-relevo.**
 
-O guia superior cobre a fresta que permite à lingueta subir. Na configuração inicial, a parte inclinada tem cerca de **1,1 mm** em Y e o guia tem **1,2 mm** em Z. Essas duas cotas foram adotadas no projeto. A curva da lente, o curso de entrada e a posição dos ressaltos seguem as cotas do exemplar.
+O corpo da barra e a faixa dianteira acompanham o mesmo arco. O modelo adota **2,00 mm** de distância livre vertical entre as duas faces opostas. Nos pontos dos pinos, o apoio recua e deixa ver, por baixo, o aro e o fundo de cada rebaixo. Na configuração inicial, a parte inclinada tem cerca de **1,1 mm** em Y e o guia tem **1,2 mm** em Z. O sentido vertical da cota de 2 mm, a extensão do recuo e as dimensões da rampa e do guia são escolhas de projeto a conferir no gabarito. A curva da lente, o curso de entrada e a posição dos ressaltos seguem as cotas do exemplar.
 
 Faça a prova de encaixe na bancada. Pare se precisar torcer a lente, se ela só entrar por um lado ou se uma trava ficar fora de posição. A resistência da articulação, a força de retenção e a proteção contra impacto ou laser exigem ensaios físicos. Para exposição a laser, use o conjunto de proteção aprovado pelo fabricante.
 
 ## Arquivos
 
-- [Release com os dois projetos 3MF](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/tag/v0.4.0) para abrir no fatiador da sua impressora.
+- [Release com os dois projetos 3MF](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/tag/v0.5.0) para abrir no fatiador da sua impressora.
 - [Fonte paramétrica em OpenSCAD](modelos/haste-oculos.scad) para editar as peças.
-- [Editor 3D para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.4.0/haste-oculos-editor.html) para conferir medidas e baixar peças individuais.
+- [Editor 3D para uso offline](https://github.com/MoraesGil/haste-oculos-lente-panoramica/releases/download/v0.5.0/haste-oculos-editor.html) para conferir medidas e baixar peças individuais.
 
 <details>
 <summary>Conferir os arquivos por SHA-256</summary>
 
 ```text
-6f2df01094e2511ce84f4903b0d082821739f9613286ff9bcd0f2475402f81df  haste-oculos-petg_A1.3mf
-9c654185c7999a8ead8ac421725bfce6957e939e10d1e58ba34b9bda2ab77c81  haste-oculos-petg_U1.3mf
+d1ebcca9cf07c728694dfb304fb596f948fbc487676ad2906f0f78c11fdcd03b  haste-oculos-petg_A1.3mf
+ad4933ad2b027c9a36a043ddcfbfccbb513fddf0fb9c5d4c4dfc2b752fc860a8  haste-oculos-petg_U1.3mf
 ```
 
 </details>

@@ -35,7 +35,7 @@ window.makeViewer = function(canvas, onPick) {
   }
   controls.addEventListener('change',render);
   scene.add(new T.HemisphereLight(0xfffcf0,0x8f9fa0,2.25));
-  for(const [x,y,z,power] of [[-100,-120,155,2],[50,130,100,1.1]]) {
+  for(const [x,y,z,power] of [[-100,-120,155,2],[50,130,100,1.1],[-40,-42,-95,1.2]]) {
     const light=new T.DirectionalLight(0xffffff,power);
     light.position.set(x,y,z);scene.add(light);
   }
@@ -62,8 +62,8 @@ window.makeViewer = function(canvas, onPick) {
     if(bounds.isEmpty())return;
     const centre=bounds.getCenter(new T.Vector3()), extent=bounds.getSize(new T.Vector3());
     const focus=markSpec ? new T.Vector3(...markSpec.a).lerp(new T.Vector3(...markSpec.b),.5) : new T.Vector3(0,5,12);
-    const detail=view==='detalhe' && ['conjunto','barra','gabarito','lente'].includes(name);
-    const vectors={iso:[.64,-1,.73],frente:[0,-1,.005],topo:[0,-.003,1],interna:[.025,1,-.62],detalhe:markSpec?[.83,-1,.45]:[.72,-1,.30]};
+    const detail=['detalhe','baixo-detalhe'].includes(view) && ['conjunto','barra','gabarito','lente'].includes(name);
+    const vectors={iso:[.64,-1,.73],frente:[0,-1,.005],topo:[0,-.003,1],baixo:[0,-.003,-1],'baixo-detalhe':[.08,-.28,-1],interna:[.025,1,-.62],detalhe:markSpec?[.83,-1,.45]:[.72,-1,.30]};
     const v=new T.Vector3(...(vectors[view]||vectors.iso)).normalize();
     const target=detail?focus:centre;
     camera.up.set(0,0,1);
